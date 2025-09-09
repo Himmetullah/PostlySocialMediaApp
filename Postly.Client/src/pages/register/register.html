@@ -1,0 +1,44 @@
+<div class="register-page" >
+  <div class="form-container">
+    <h2>Kayıt Ol</h2>
+    <h4>Postly ailesine katıl!</h4>
+    <br>
+    @if (message) {
+      <div class="notification">
+        <p [ngClass]="messageType">{{ message }}</p>
+      </div>
+    }
+    <br>
+    <form (ngSubmit)="register()">
+      <div class="form-group">
+        <label for="ad">Ad</label>
+        <input id="ad" name="ad" type="text" class="form-input"
+               [(ngModel)]="user.ad" required>
+      </div>
+
+      <div class="form-group">
+        <label for="soyad">Soyad</label>
+        <input id="soyad" name="soyad" type="text" class="form-input"
+               [(ngModel)]="user.soyad" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">E-posta</label>
+        <input id="email" name="email" type="email" class="form-input"
+               [(ngModel)]="user.email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="sifre">Şifre</label>
+        <input id="sifre" name="sifre" type="password" class="form-input"
+               [(ngModel)]="user.sifre" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%;">Kayıt Ol</button>
+    </form>
+
+    <div class="switch-form">
+      Zaten hesabın var mı? <a routerLink="/login">Giriş yap</a>
+    </div>
+  </div>
+</div>
