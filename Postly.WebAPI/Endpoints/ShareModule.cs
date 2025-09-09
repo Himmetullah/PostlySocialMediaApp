@@ -16,6 +16,7 @@ public class ShareModule : IEndpoint
         app.MapGet(string.Empty, async (ApplicationDbContext dbContext, CancellationToken cancellationToken) =>
         {
             var res = await dbContext.Shares
+            .Include(p => p.User)
             .OrderByDescending(p => p.PaylasimTarihi)
             .ToListAsync(cancellationToken);
             return res;
@@ -36,10 +37,15 @@ public class ShareModule : IEndpoint
 
         app.MapPost(string.Empty, async ([FromForm] CreateShareDto request, ApplicationDbContext dbContext, CancellationToken cancellationToken) =>
         {
-            var fileName = DateTime.Now.ToFileTime() + "_" + request.IcerikResim?.FileName;
-            using (var stream = new FileStream($"wwwroot/{fileName}", FileMode.Create))
+            string? fileName = null; 
+
+            if (request.IcerikResim != null)
             {
-                request.IcerikResim?.CopyTo(stream);
+                fileName = DateTime.Now.ToFileTime() + "_" + request.IcerikResim.FileName;
+                using (var stream = new FileStream($"wwwroot/{fileName}", FileMode.Create))
+                {
+                    await request.IcerikResim.CopyToAsync(stream);
+                }
             }
 
             Share share = new Share
@@ -47,9 +53,10 @@ public class ShareModule : IEndpoint
                 Id = Guid.NewGuid(),
                 UserId = request.UserId,
                 Icerik = request.Icerik,
-                IcerikResimUrl = fileName,
+                IcerikResimUrl = fileName, 
                 PaylasimTarihi = DateTime.UtcNow
             };
+
             dbContext.Add(share);
             await dbContext.SaveChangesAsync(cancellationToken);
 

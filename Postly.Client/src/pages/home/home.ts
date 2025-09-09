@@ -11,12 +11,18 @@ interface CreateShareDto {
   icerikResim?: File;
 }
 
+interface User {
+  ad: string;
+  soyad: string;
+}
+
 interface Share {
   id: string;
   icerik: string;
   icerikResimUrl?: string;
   paylasimTarihi: string;
   userId: string;
+  user: User;
 }
 
 @Component({
@@ -42,6 +48,7 @@ export default class Home implements OnInit{
     this.http.get<any[]>('https://localhost:7107/shares')
     .subscribe({
       next: (data) => {
+        console.log("API'den gelen veri:", data);
         this.shares = [...data];
         this.cdr.detectChanges();
         },
