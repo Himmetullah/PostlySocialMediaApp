@@ -212,9 +212,9 @@ body {
 
 .post-image {
     width: 100%;
-    height: 300px;
+    max-height: 400px;
+    object-fit: contain;
     border-radius: 15px;
-    object-fit: cover;
     margin: 1rem 0;
 }
 
@@ -682,6 +682,10 @@ body {
     font-size: 1.1rem;
 }
 
+.avatar-img {
+    max-height: 50px;
+}
+
 .post-info h3 {
     margin: 0;
     color: #333;
@@ -697,14 +701,6 @@ body {
     margin: 1rem 0;
     line-height: 1.6;
     font-size: 1rem;
-}
-
-.post-image {
-    width: 100%;
-    height: 300px;
-    border-radius: 15px;
-    object-fit: cover;
-    margin: 1rem 0;
 }
 
 .post-actions {
@@ -1140,4 +1136,17 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.no-user-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh; 
+}
+
+.login-image {
+  max-width: 700px; 
+  height: auto; 
+  opacity: 0.8; 
+  border-radius: 30px;
+}
 

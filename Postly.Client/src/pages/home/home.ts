@@ -5,15 +5,10 @@ import { AuthService } from '../../service/auth';
 import { finalize } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
-interface CreateShareDto {
-  userId: string;
-  icerik: string;
-  icerikResim?: File;
-}
-
 interface User {
   ad: string;
   soyad: string;
+  imageUrl: string;
 }
 
 interface Share {
@@ -32,35 +27,34 @@ interface Share {
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.Default
 })
-export default class Home implements OnInit{
+export default class Home implements OnInit {
   shares: Share[] = [];
   newShareText: string = '';
   selectedFile: File | null = null;
   isLoading: boolean = false;
 
-  constructor(private http: HttpClient, private authService: AuthService, private cdr: ChangeDetectorRef){}
+  constructor(private http: HttpClient, private authService: AuthService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.getShares();
   }
 
-  getShares(): void{
+  getShares(): void {
     this.http.get<any[]>('https://localhost:7107/shares')
-    .subscribe({
-      next: (data) => {
-        console.log("API'den gelen veri:", data);
-        this.shares = [...data];
-        this.cdr.detectChanges();
+      .subscribe({
+        next: (data) => {
+          this.shares = [...data];
+          this.cdr.detectChanges();
         },
         error: (err) => {
           console.error('Failed to fetch shares:', err);
         }
-    });
+      });
   }
 
   onFileSelected(event: any): void {
     const file: File = event.target.files[0];
-    if(file){
+    if (file) {
       this.selectedFile = file;
     }
   }
@@ -68,11 +62,11 @@ export default class Home implements OnInit{
   createShare(): void {
     const userId = this.authService.getUserId();
 
-    if(!userId){
+    if (!userId) {
       alert('Paylaşım yapabilmek için lütfen giriş yapınız.');
       return;
     }
-    if(!this.newShareText && !this.selectedFile){
+    if (!this.newShareText && !this.selectedFile) {
       alert('Lütfen bir içerik veya resim ekleyin.');
       return;
     }
@@ -82,30 +76,27 @@ export default class Home implements OnInit{
     formData.append('userId', userId);
     formData.append('icerik', this.newShareText);
 
-    if(this.selectedFile){
+    if (this.selectedFile) {
       formData.append('icerikResim', this.selectedFile, this.selectedFile.name);
     }
 
     this.http.post('https://localhost:7107/shares', formData)
-    .pipe(
-      finalize(() => {
-        this.isLoading = false;
-        this.cdr.detectChanges();
-      })
-    )
-    .subscribe({
-      next: (response) => {
-        console.log('Shares created successfılly', response);
-        this.newShareText = '';
-        this.selectedFile = null;
-        this.getShares();
-        alert('Paylaşım başarıyla oluşturuldu!');
-      },
-      error: (err) => {
-        console.error('Failed to create share:', err);
-        alert('Paylaşım oluşturulurken bir hata oluştu.');
-      }
-    });
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          this.newShareText = '';
+          this.selectedFile = null;
+          this.getShares();
+          alert('Paylaşım başarıyla oluşturuldu!');
+        },
+        error: (err) => {
+          alert('Paylaşım oluşturulurken bir hata oluştu.');
+        }
+      });
   }
-
 }

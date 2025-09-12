@@ -1,65 +1,72 @@
 @if (user) {
-  <div id="profile-page" class="container">
-    <!-- Profil Başlık -->
-    <div class="profile-header">
-      <div class="profile-avatar">
-        <img 
-          [src]="'https://localhost:7107/' + user.imageUrl" 
-          alt="Profil Resmi" 
-          class="avatar-img">
-      </div>
-
-      <div class="profile-info">
-        <h2>{{ user.ad }} {{ user.soyad }}</h2>
-        <button class="follow-btn">Takip Et</button>
-      </div>
-
-      <div class="profile-stats">
-        <div class="stat">
-          <div class="stat-number">1</div>
-          <div class="stat-label">Gönderi</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number">25</div>
-          <div class="stat-label">Takipçi</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number">10</div>
-          <div class="stat-label">Takip</div>
-        </div>
-      </div>
+<div id="profile-page" class="container">
+  <!-- Profil Başlık -->
+  <div class="profile-header">
+    <div class="profile-img">
+      <img [src]="'https://localhost:7107/' + user.imageUrl" alt="Profil Resmi" class="avatar-img">
     </div>
 
-    <!-- Örnek Gönderi -->
-    <div class="post">
-      <div class="post-header">
-        <div class="avatar">
-          {{ user.ad?.[0] }}{{ user.soyad?.[0] }}
-        </div>
-        <div class="post-info">
-          <h3>{{ user.ad }} {{ user.soyad }}</h3>
-          <span>1 gün önce</span>
-        </div>
+    <div class="profile-info">
+      <h2>{{ user.ad }} {{ user.soyad }}</h2>
+      <button class="follow-btn">Takip Et</button>
+    </div>
+
+    <div class="profile-stats">
+      <div class="stat">
+        <div class="stat-number">0</div>
+        <div class="stat-label">Gönderi</div>
       </div>
-      <div class="post-content">
-        Yeni bir projeye başlıyorum. Heyecanım dorukta! 🎯
+      <div class="stat">
+        <div class="stat-number">0</div>
+        <div class="stat-label">Takipçi</div>
       </div>
-      <div class="post-actions">
-        <button class="action-btn">
-          <i class="far fa-heart"></i>
-          <span>45</span>
-        </button>
-        <button class="action-btn">
-          <i class="far fa-comment"></i>
-          <span>12</span>
-        </button>
-        <button class="action-btn">
-          <i class="far fa-share-from-square"></i>
-          <span>5</span>
-        </button>
+      <div class="stat">
+        <div class="stat-number">0</div>
+        <div class="stat-label">Takip</div>
       </div>
     </div>
   </div>
+
+  @if (shares.length > 0) {
+  @for (share of shares; track share.id) {
+  <div class="post">
+    <div class="post-header">
+      <div class="avatar">
+        <img [src]="'https://localhost:7107/' + share.user.imageUrl" alt="Profil Resmi" class="avatar-img">
+      </div>
+      <div class="post-info">
+        <h3>{{share.user.ad}} {{share.user.soyad}}</h3>
+        <span>{{ share.paylasimTarihi | date: 'short'}}</span>
+      </div>
+    </div>
+    <div class="post-content">
+      {{ share.icerik}}
+    </div>
+    @if (share.icerikResimUrl) {
+    <img [src]="'https://localhost:7107/' + share.icerikResimUrl" class="post-image" alt="Post resmi">
+    }
+    <div class="post-actions">
+      <button class="action-btn">
+        <i class="far fa-heart"></i>
+        <span>0</span>
+      </button>
+      <button class="action-btn">
+        <i class="far fa-comment"></i>
+        <span>0</span>
+      </button>
+      <button class="action-btn">
+        <i class="far fa-share-from-square"></i>
+        <span>0</span>
+      </button>
+    </div>
+  </div>
+  }
+  } @else {
+  <p class="no-shares-message">Henüz hiç paylaşım yapılmamış.</p>
+  }
+</div>
 } @else {
-  <h4 style="color: white;">Profil sayfası için lütfen önce giriş yapın...</h4>
+<div class="no-user-container">
+    <img src="/girisyap.png" alt="Giriş yapmalısınız" class="login-image">
+</div>
 }

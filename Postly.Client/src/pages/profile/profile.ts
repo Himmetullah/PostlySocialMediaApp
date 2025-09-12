@@ -3,6 +3,21 @@ import { AuthService } from '../../service/auth';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
+interface User {
+  ad: string;
+  soyad: string;
+  imageUrl: string;
+}
+
+interface Share {
+  id: string;
+  icerik: string;
+  icerikResimUrl?: string;
+  paylasimTarihi: string;
+  userId: string;
+  user: User;
+}
+
 @Component({
   selector: 'app-profile',
   imports: [CommonModule],
@@ -13,10 +28,12 @@ import { CommonModule } from '@angular/common';
 })
 export default class Profile implements OnInit {
   user: any = null;
+  shares: Share[] = [];
 
   constructor(private authService: AuthService, private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
+    this.getShares();
     const storedUserId = this.authService.getUserId();
 
     if (!storedUserId) {
@@ -35,6 +52,20 @@ export default class Profile implements OnInit {
         this.user = null;
         this.cdr.detectChanges();
       }
+    });
+
+  }
+  getShares(): void{
+    this.http.get<any[]>('https://localhost:7107/shares')
+    .subscribe({
+      next: (data) => {
+        console.log("API'den gelen veri:", data);
+        this.shares = [...data];
+        this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('Failed to fetch shares:', err);
+        }
     });
   }
 }

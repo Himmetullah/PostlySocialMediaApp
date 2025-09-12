@@ -4,13 +4,13 @@
     <div class="post-actions">
       <div class="post-icons">
         <input type="file" id="file-input" (change)="onFileSelected($event)" style="display: none;">
-        
+
         <label for="file-input" class="post-icon" title="Fotoğraf">
           <i class="fas fa-image"></i>
         </label>
-        
+
         @if (selectedFile) {
-          <span class="file-name">{{ selectedFile.name }}</span>
+        <span class="file-name">{{ selectedFile.name }}</span>
         }
       </div>
       <button class="btn btn-primary" (click)="createShare()">Paylaş</button>
@@ -18,38 +18,40 @@
   </div>
 
   @if (shares.length > 0) {
-    @for (share of shares; track share.id) {
-      <div class="post">
-        <div class="post-header">
-          <div class="avatar">U</div>
-          <div class="post-info">
-            <h3>{{share.user.ad}} {{share.user.soyad}}</h3>
-            <span>{{ share.paylasimTarihi | date: 'short'}}</span>
-          </div>
-        </div>
-        <div class="post-content">
-          {{ share.icerik}}
-        </div>
-        @if (share.icerikResimUrl) {
-          <img [src]="'https://localhost:7107/' + share.icerikResimUrl" class="post-image" alt="Post resmi">
-        }
-        <div class="post-actions">
-          <button class="action-btn">
-            <i class="far fa-heart"></i>
-            <span>0</span>
-          </button>
-          <button class="action-btn">
-            <i class="far fa-comment"></i>
-            <span>0</span>
-          </button>
-          <button class="action-btn">
-            <i class="far fa-share-from-square"></i>
-            <span>0</span>
-          </button>
-        </div>
+  @for (share of shares; track share.id) {
+  <div class="post">
+    <div class="post-header">
+      <div class="avatar">
+        <img [src]="'https://localhost:7107/' + share.user.imageUrl" alt="Profil Resmi" class="avatar-img">
       </div>
+      <div class="post-info">
+        <h3>{{share.user.ad}} {{share.user.soyad}}</h3>
+        <span>{{ share.paylasimTarihi | date: 'short'}}</span>
+      </div>
+    </div>
+    <div class="post-content">
+      {{ share.icerik}}
+    </div>
+    @if (share.icerikResimUrl) {
+    <img [src]="'https://localhost:7107/' + share.icerikResimUrl" class="post-image" alt="Post resmi">
     }
+    <div class="post-actions">
+      <button class="action-btn">
+        <i class="far fa-heart"></i>
+        <span>0</span>
+      </button>
+      <button class="action-btn">
+        <i class="far fa-comment"></i>
+        <span>0</span>
+      </button>
+      <button class="action-btn">
+        <i class="far fa-share-from-square"></i>
+        <span>0</span>
+      </button>
+    </div>
+  </div>
+  }
   } @else {
-    <p class="no-shares-message">Henüz hiç paylaşım yapılmamış.</p>
+  <p class="no-shares-message">Henüz hiç paylaşım yapılmamış.</p>
   }
 </div>

@@ -11,5 +11,6 @@ namespace Postly.WebAPI.Context
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Share> Shares { get; set; }
+        public DbSet<Like> Likes { get; set; }
     }
 }
